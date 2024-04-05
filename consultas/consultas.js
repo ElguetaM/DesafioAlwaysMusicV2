@@ -8,16 +8,13 @@ const curso = dato[3];
 const nivel = dato[4];
 
 const showUsers = async () => {
-  try {
-    const sql = {
-      text: "SELECT * FROM Estudiantes",
-      rowMode: "array",
-    };
+  const sql = {
+    text: "SELECT * FROM Estudiantes",
+    rowMode: "array",
+  };
 
-    const response = await pool.query(sql);
-  } catch (error) {
-    console.log(error);
-  }
+  const response = await pool.query(sql);
+  console.log(response.rows);
 };
 const addUser = async (nombre, rut, curso, nivel) => {
   try {
@@ -45,7 +42,7 @@ const searchUser = async (rut) => {
     };
 
     const response = await pool.query(sql);
-    console.log(`Estudiante encontrado`);
+    console.log(`Estudiante encontrado`, response.rows);
   } catch (error) {
     console.log(error);
   }
@@ -67,7 +64,7 @@ const updateUser = async (nombre, rut, curso, nivel) => {
 const deleteUser = async (rut) => {
   try {
     const sql = {
-      test: "DELETE FROM Estudiantes WHERE rut = $1",
+      text: "DELETE FROM Estudiantes WHERE rut = $1",
       values: [rut],
       rowMode: "array",
     };
@@ -79,18 +76,24 @@ const deleteUser = async (rut) => {
   }
 };
 
-if (option === "add") {
-  addUser(nombre, rut, curso, nivel);
-} else if (option === "show") {
-  showUsers();
-} else if (option === "search") {
-  rut = dato[1];
-  searchUser(rut);
-} else if (option === "update") {
-  updateUser(nombre, rut, curso, nivel);
-} else if (option === "delete") {
-  rut = dato[1];
-  deleteUser(rut);
-} else {
-  console.log("Opción inválida");
+//Probando con switch//
+
+switch (option) {
+  case "add":
+    addUser(nombre, rut, curso, nivel);
+    break;
+  case "show":
+    showUsers();
+    break;
+  case "search":
+    rut = dato[1];
+    searchUser(rut);
+    break;
+  case "update":
+    updateUser(nombre, rut, curso, nivel);
+    break;
+  case "delete":
+    rut = dato[1];
+    deleteUser(rut);
+    break;
 }
